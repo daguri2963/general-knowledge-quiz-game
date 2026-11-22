@@ -1,13 +1,12 @@
 """메뉴와 게임 진행을 담당합니다."""
 
-from default_quizzes import make_default_quizzes
 from quiz import Quiz
+from storage import load_state, save_state
 
 
 class QuizGame:
     def __init__(self) -> None:
-        self.quizzes: list[Quiz] = make_default_quizzes()
-        self.best_score: dict | None = None
+        self.quizzes, self.best_score = load_state()
 
     @staticmethod
     def read_number(prompt: str, minimum: int, maximum: int) -> int:
@@ -42,6 +41,7 @@ class QuizGame:
         if self.best_score is None or score > self.best_score["score"]:
             self.best_score = {"score": score, "correct": correct, "total": total}
             print("새로운 최고 점수입니다!")
+            save_state(self.quizzes, self.best_score)
 
     @staticmethod
     def read_text(prompt: str) -> str:
@@ -57,7 +57,8 @@ class QuizGame:
         choices = [self.read_text(f"선택지 {number}: ") for number in range(1, 5)]
         answer = self.read_number("정답 번호 (1~4): ", 1, 4)
         self.quizzes.append(Quiz(question, choices, answer))
-        print("퀴즈가 추가되었습니다.")
+        if save_state(self.quizzes, self.best_score):
+            print("퀴즈가 추가되고 저장되었습니다.")
 
     def list_quizzes(self) -> None:
         if not self.quizzes:
