@@ -40,6 +40,17 @@ quiz-game/
 
 `Quiz`는 한 문제의 데이터와 정답 판정을 맡고, `QuizGame`은 메뉴와 풀이 흐름을 맡습니다. 클래스로 나누면 문제 형식 검증을 한 곳에서 재사용하고, 메뉴를 바꿀 때 문제 데이터 코드를 건드리지 않아도 됩니다. 파일 저장은 `storage.py`에 분리해 테스트할 수 있게 했습니다.
 
+## 요구 사항이 바뀌면 수정할 곳
+
+| 변경 요구 | 수정할 코드 | 함께 확인할 내용 |
+| --- | --- | --- |
+| 점수 계산 방식이나 최고 점수 비교 기준 변경 | `game.py`의 `QuizGame.play()`에서 `score` 계산과 `best_score` 비교, `QuizGame.show_score()`의 출력 | `tests/test_game.py`의 점수 재실행 테스트와 README의 점수 설명 |
+| 문제·선택지·정답 같은 퀴즈 모델 변경 | `quiz.py`의 `Quiz` 속성·`__post_init__()` 검증·`to_dict()`·`from_dict()` | `default_quizzes.py`의 기본 문제, `game.py`의 입력·출제 화면, 기존 `state.json` 데이터와의 호환성 |
+| 데이터 파일 이름·형식·저장 시점 변경 | `storage.py`의 `STATE_PATH`, `load_state()`, `save_state()` 및 `game.py`의 저장 호출 위치 | `tests/test_game.py`의 추가·점수 유지·손상 파일 복구 테스트와 아래 JSON 스키마 |
+| 메뉴 항목이나 입력 범위 변경 | `game.py`의 `QuizGame.run()`과 `read_number()` | 실행 화면과 잘못된 입력 테스트 |
+
+데이터 형식을 바꿀 때는 기존 `state.json`을 읽을 수 있는지도 확인해야 합니다. 변경 후에는 `python -m unittest discover -s tests -v`를 실행하고, 달라진 화면과 README 예시를 다시 갱신합니다.
+
 ## 데이터 파일
 
 `state.json`은 프로젝트 루트에 UTF-8로 저장됩니다. 첫 실행에는 기본 문제 7개를 사용합니다. 파일이 없거나 손상되어 읽을 수 없다면 기본 문제로 시작합니다. 새 문제를 추가하거나 최고 점수가 바뀌면 저장합니다. 개인별 게임 기록이므로 Git에는 포함하지 않습니다.
