@@ -69,3 +69,7 @@ git log --oneline --graph --all
 ```
 
 실행 결과 이미지는 [docs/screenshots](docs/screenshots)에 있습니다.
+
+## Git 복제 실습
+
+이 저장소를 별도 폴더에 `git clone`한 뒤 이 문장을 추가해 커밋하고 푸시했습니다. 원래 작업 폴더에서는 `git pull`로 변경을 가져왔습니다.
