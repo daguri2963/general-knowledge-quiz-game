@@ -15,14 +15,17 @@ class QuizGame:
     def read_number(prompt: str, minimum: int, maximum: int) -> int:
         while True:
             raw = input(prompt).strip()
+            if not raw:
+                print(f"입력이 비어 있습니다. {minimum}~{maximum} 사이의 숫자를 입력하세요.")
+                continue
             try:
                 number = int(raw)
             except ValueError:
-                print(f"{minimum}~{maximum} 사이의 숫자를 입력하세요.")
+                print(f"숫자가 아닙니다. {minimum}~{maximum} 사이의 숫자를 입력하세요.")
                 continue
             if minimum <= number <= maximum:
                 return number
-            print(f"{minimum}~{maximum} 사이의 숫자를 입력하세요.")
+            print(f"범위를 벗어났습니다. {minimum}~{maximum} 사이의 숫자를 입력하세요.")
 
     def play(self) -> None:
         if not self.quizzes:

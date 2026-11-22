@@ -7,6 +7,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,13 +51,32 @@ class GameTests(unittest.TestCase):
         (self.folder / "state.json").write_text("{broken", encoding="utf-8")
         output = self.run_game("\nabc\n9\n 3 \n5\n")
         self.assertIn("기본 퀴즈로 시작합니다", output)
+        self.assertIn("원본 파일을 백업했습니다", output)
         self.assertEqual(output.count("1~5 사이의 숫자를 입력하세요."), 3)
+        self.assertIn("입력이 비어 있습니다", output)
+        self.assertIn("숫자가 아닙니다", output)
+        self.assertIn("범위를 벗어났습니다", output)
         self.assertIn("등록된 퀴즈 목록 (총 7개)", output)
+        backups = list(self.folder.glob("state.corrupt-*.json"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(backups[0].read_text(encoding="utf-8"), "{broken")
 
     def test_eof_saves_and_exits(self) -> None:
         output = self.run_game("")
         self.assertIn("입력이 중단되어 게임을 종료합니다.", output)
         self.assertTrue((self.folder / "state.json").exists())
+
+    def test_failed_replace_preserves_previous_state(self) -> None:
+        import storage
+        from default_quizzes import make_default_quizzes
+
+        state = self.folder / "state.json"
+        state.write_text('{"previous": true}', encoding="utf-8")
+        with patch.object(storage, "STATE_PATH", state):
+            with patch.object(Path, "replace", side_effect=OSError("simulated failure")):
+                self.assertFalse(storage.save_state(make_default_quizzes(), None))
+        self.assertEqual(state.read_text(encoding="utf-8"), '{"previous": true}')
+        self.assertFalse((self.folder / "state.json.tmp").exists())
 
 
 if __name__ == "__main__":
