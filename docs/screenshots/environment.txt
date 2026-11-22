@@ -1,0 +1,7 @@
+PS> python --version
+Python 3.15.0
+PS> git --version
+git version 2.55.0.windows.5
+PS> git status --short --branch
+## main
+?? docs/
