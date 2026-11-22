@@ -1,0 +1,13 @@
+test_add_quiz_survives_restart (test_game.GameTests.test_add_quiz_survives_restart) ... ok
+test_eof_saves_and_exits (test_game.GameTests.test_eof_saves_and_exits) ... ok
+test_failed_replace_preserves_previous_state (test_game.GameTests.test_failed_replace_preserves_previous_state) ... ok
+test_invalid_input_and_corrupt_file (test_game.GameTests.test_invalid_input_and_corrupt_file) ... ok
+test_score_survives_restart (test_game.GameTests.test_score_survives_restart) ... ok
+test_thousand_quizzes (test_performance.PerformanceTests.test_thousand_quizzes) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.500s
+
+OK
+저장하지 못했습니다: simulated failure
+1000 quizzes: 0.08s, peak 1.37 MiB
