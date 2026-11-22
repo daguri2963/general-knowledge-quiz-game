@@ -15,7 +15,10 @@ SOURCES = ("main.py", "game.py", "quiz.py", "default_quizzes.py", "storage.py")
 
 
 class GameTests(unittest.TestCase):
+    """파일을 격리해 실제 프로그램의 저장·입력·종료 동작을 확인합니다."""
+
     def setUp(self) -> None:
+        """각 테스트가 서로의 state.json을 읽지 않도록 임시 폴더를 만듭니다."""
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.folder = Path(self.temp.name)
@@ -23,6 +26,7 @@ class GameTests(unittest.TestCase):
             shutil.copy2(ROOT / name, self.folder / name)
 
     def run_game(self, answers: str) -> str:
+        """answers를 stdin에 전달하고 실제 콘솔 출력을 반환합니다."""
         result = subprocess.run(
             [sys.executable, "main.py"],
             cwd=self.folder,
@@ -36,6 +40,7 @@ class GameTests(unittest.TestCase):
         return result.stdout
 
     def test_add_quiz_survives_restart(self) -> None:
+        """문제 추가 후 재실행해도 JSON의 새 문제가 유지되는지 확인합니다."""
         output = self.run_game("2\n새 상식 문제?\n하나\n둘\n셋\n넷\n 2 \n5\n")
         self.assertIn("퀴즈가 추가되고 저장되었습니다.", output)
         self.assertIn("새 상식 문제?", self.run_game("3\n5\n"))
@@ -43,11 +48,13 @@ class GameTests(unittest.TestCase):
         self.assertEqual(len(data["quizzes"]), 8)
 
     def test_score_survives_restart(self) -> None:
+        """최고 점수가 게임을 다시 시작해도 보이는지 확인합니다."""
         output = self.run_game("1\n2\n3\n2\n3\n4\n2\n1\n5\n")
         self.assertIn("7문제 중 7문제 정답! (100점)", output)
         self.assertIn("최고 점수: 100점", self.run_game("4\n5\n"))
 
     def test_invalid_input_and_corrupt_file(self) -> None:
+        """잘못된 입력 안내와 손상 파일의 백업·기본 문제 복구를 확인합니다."""
         (self.folder / "state.json").write_text("{broken", encoding="utf-8")
         output = self.run_game("\nabc\n9\n 3 \n5\n")
         self.assertIn("기본 퀴즈로 시작합니다", output)
@@ -62,11 +69,13 @@ class GameTests(unittest.TestCase):
         self.assertEqual(backups[0].read_text(encoding="utf-8"), "{broken")
 
     def test_eof_saves_and_exits(self) -> None:
+        """입력이 바로 끝나도 예외 화면 없이 저장 후 종료하는지 확인합니다."""
         output = self.run_game("")
         self.assertIn("입력이 중단되어 게임을 종료합니다.", output)
         self.assertTrue((self.folder / "state.json").exists())
 
     def test_failed_replace_preserves_previous_state(self) -> None:
+        """임시 파일 교체에 실패해도 기존 JSON을 덮지 않는지 확인합니다."""
         import storage
         from default_quizzes import make_default_quizzes
 

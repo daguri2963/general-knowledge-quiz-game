@@ -12,7 +12,10 @@ from quiz import Quiz
 
 
 class PerformanceTests(unittest.TestCase):
+    """문제가 1,000개여도 목록·풀이가 무리 없이 동작하는지 확인합니다."""
+
     def test_thousand_quizzes(self) -> None:
+        """실행 시간과 최대 추적 메모리를 측정하고 상한을 검사합니다."""
         tracemalloc.start()
         started = time.perf_counter()
         try:
