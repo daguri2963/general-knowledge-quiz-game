@@ -8,6 +8,9 @@ class QuizGame:
     def __init__(self) -> None:
         self.quizzes, self.best_score = load_state()
 
+    def save(self) -> bool:
+        return save_state(self.quizzes, self.best_score)
+
     @staticmethod
     def read_number(prompt: str, minimum: int, maximum: int) -> int:
         while True:
@@ -93,7 +96,6 @@ class QuizGame:
             elif choice == 4:
                 self.show_score()
             elif choice == 5:
+                self.save()
                 print("다음에 또 만나요!")
                 return
-            else:
-                print("기능을 준비 중입니다.")

@@ -11,9 +11,9 @@ STATE_PATH = Path(__file__).resolve().parent / "state.json"
 
 
 def load_state() -> tuple[list[Quiz], dict | None]:
-    if not STATE_PATH.exists():
-        return make_default_quizzes(), None
     try:
+        if not STATE_PATH.exists():
+            return make_default_quizzes(), None
         with STATE_PATH.open("r", encoding="utf-8") as file:
             data = json.load(file)
         if not isinstance(data, dict) or not isinstance(data["quizzes"], list):
