@@ -39,6 +39,9 @@ class QuizGame:
         total = len(self.quizzes)
         score = round(correct / total * 100)
         print(f"\n결과: {total}문제 중 {correct}문제 정답! ({score}점)")
+        if self.best_score is None or score > self.best_score["score"]:
+            self.best_score = {"score": score, "correct": correct, "total": total}
+            print("새로운 최고 점수입니다!")
 
     @staticmethod
     def read_text(prompt: str) -> str:
@@ -64,6 +67,13 @@ class QuizGame:
         for number, quiz in enumerate(self.quizzes, start=1):
             print(f"{number}. {quiz.question}")
 
+    def show_score(self) -> None:
+        if self.best_score is None:
+            print("아직 퀴즈를 푼 기록이 없습니다.")
+            return
+        best = self.best_score
+        print(f"최고 점수: {best['score']}점 ({best['total']}문제 중 {best['correct']}문제 정답)")
+
     def run(self) -> None:
         while True:
             print("\n=== 상식 퀴즈 게임 ===")
@@ -79,6 +89,8 @@ class QuizGame:
                 self.add_quiz()
             elif choice == 3:
                 self.list_quizzes()
+            elif choice == 4:
+                self.show_score()
             elif choice == 5:
                 print("다음에 또 만나요!")
                 return
