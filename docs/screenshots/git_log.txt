@@ -1,4 +1,7 @@
 PS> git log --oneline --graph --all
+* ace2c28 Docs: 복제 저장소에서 Git 실습 기록 추가
+* 60b2968 Chore: 복제 실습 폴더를 Git 추적에서 제외
+* 454861e Docs: 실행 결과 환경과 Git 기록 이미지 첨부
 * 624214f Test: 재실행 저장 입력 오류와 EOF 종료 검증
 * 712d481 Docs: 주제 실행법 기능 파일 구조와 JSON 형식 문서화
 * 4395a48 Fix: 잘못된 입력과 입력 중단 시 안전하게 종료
