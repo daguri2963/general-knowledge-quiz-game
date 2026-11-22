@@ -68,8 +68,36 @@ python -m unittest discover -s tests -v
 git log --oneline --graph --all
 ```
 
-실행 결과 이미지는 [docs/screenshots](docs/screenshots)에 있습니다.
+## 실행 화면
+
+### 메뉴
+
+![퀴즈 게임 메뉴](docs/screenshots/menu.png)
+
+### 퀴즈 추가와 목록
+
+![퀴즈 추가 실행 화면](docs/screenshots/add_quiz.png)
+
+![퀴즈 목록 실행 화면](docs/screenshots/quiz_list.png)
+
+### 퀴즈 풀기와 최고 점수
+
+![퀴즈 풀기 실행 화면](docs/screenshots/play.png)
+
+![최고 점수 확인 화면](docs/screenshots/score.png)
+
+### 잘못된 입력 처리
+
+![잘못된 입력 처리 화면](docs/screenshots/invalid_input.png)
+
+## 개발 환경과 Git 기록
+
+![Python 및 Git 버전 확인](docs/screenshots/environment.png)
+
+![Git 커밋과 브랜치 병합 기록](docs/screenshots/git_log.png)
 
 ## Git 복제 실습
 
-이 저장소를 별도 폴더에 `git clone`한 뒤 이 문장을 추가해 커밋하고 푸시했습니다. 원래 작업 폴더에서는 `git pull`로 변경을 가져왔습니다.
+원본 저장소의 `pull --ff-only` 기록과 복제본의 `clone` 기록:
+
+![git clone 및 git pull 실행 기록](docs/screenshots/git_workflow.png)
